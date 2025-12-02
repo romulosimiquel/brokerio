@@ -66,6 +66,15 @@ define('DB_USER', 'your_username');
 define('DB_PASS', 'your_password');
 ```
 
+Alternativaly, you may use PhpMyAdmin.
+
+```php
+define('DB_HOST', 'localhost');
+define('DB_NAME', 'phpmyadmin');
+define('DB_USER', 'phpmyadmin_username');
+define('DB_PASS', 'phpmyadmin_password');
+```
+
 ### 3. Web Server Configuration
 
 ### Apache
