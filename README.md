@@ -84,7 +84,7 @@ Ensure your document root points to the project directory, or configure a virtua
 
 ```apache
 <VirtualHost *:80>
-    ServerName brokerio.dev
+    ServerName brokerio
     DocumentRoot /var/www/brokerio
     
     <Directory /var/www/brokerio>
@@ -141,6 +141,11 @@ chmod -R 755 /var/www/html/brokerio
 2. Enter a note in the textarea
 3. Click "Add Note"
 4. The note will appear in the list immediately
+
+### Properties listing
+
+1. At My Properties sidebar, find the wanted property
+2. Click on the property name, you'll be redirected to its map page
 
 ## API Endpoints
 
@@ -217,6 +222,15 @@ If you need higher rate limits or more features, you can modify the `geocodeAddr
 - API endpoints validate input and return appropriate HTTP status codes
 - Consider adding authentication/authorization for production use
 
+## References
+
+This project uses LeafletJs for interactive maps and Nominatim Openstreetmap for
+addresses data.
+
+- [Leaflet documentation](https://leafletjs.com/examples/quick-start/)
+- [Nominatim Documentation](https://nominatim.org/release-docs/develop/api/Search/)
+- [Nominatin Api](https://nominatim.openstreetmap.org/ui/search.html)
+
 ## Troubleshooting
 
 ### Database Connection Error
@@ -250,9 +264,13 @@ curl http://localhost/brokerio/api/property.php?id=1
 curl -X POST http://localhost/brokerio/api/add_note.php \
   -H "Content-Type: application/json" \
   -d '{"property_id":1,"note":"Test note"}'
+  
+# If virtual host is configured try the following
+
+curl http://brokerio/api/property.php\?id\=1
+
+curl -X POST http://brokerio/api/add_note.php \
+  -H "Content-Type: application/json" \
+  -d '{"property_id":1,"note":"Test note"}'
+
 ```
-
-## License
-
-This project is provided as-is for evaluation purposes.
-

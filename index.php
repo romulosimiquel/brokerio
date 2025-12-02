@@ -81,6 +81,8 @@ function geocodeAddress($address) {
     ]);
     
     $response = @file_get_contents($url, false, $context);
+
+    print_r($response);
     
     if ($response === false) {
         return null;

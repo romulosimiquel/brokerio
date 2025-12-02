@@ -1,15 +1,4 @@
 <?php
-/**
- * Add Note API
- * POST /api/add_note.php
- * 
- * Expected JSON payload:
- * {
- *   "property_id": 1,
- *   "note": "This is a note about the property"
- * }
- */
-
 header('Content-Type: application/json');
 require_once __DIR__ . '/db.php';
 
@@ -26,7 +15,6 @@ try {
     $propertyId = $input['property_id'] ?? null;
     $note = trim($input['note'] ?? '');
     
-    // Validation
     if (!$propertyId || !is_numeric($propertyId)) {
         http_response_code(400);
         echo json_encode(['error' => 'Invalid or missing property_id']);
@@ -40,8 +28,7 @@ try {
     }
     
     $pdo = getDbConnection();
-    
-    // Verify property exists
+
     $stmt = $pdo->prepare("SELECT id FROM properties WHERE id = ?");
     $stmt->execute([$propertyId]);
     if (!$stmt->fetch()) {
@@ -49,14 +36,12 @@ try {
         echo json_encode(['error' => 'Property not found']);
         exit;
     }
-    
-    // Insert note
+
     $stmt = $pdo->prepare("INSERT INTO notes (property_id, note) VALUES (?, ?)");
     $stmt->execute([$propertyId, $note]);
     
     $noteId = $pdo->lastInsertId();
     
-    // Return success with created note
     http_response_code(201);
     echo json_encode([
         'success' => true,
