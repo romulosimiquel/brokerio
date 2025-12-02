@@ -67,6 +67,15 @@ define('DB_USER', 'your_username');
 define('DB_PASS', 'your_password');
 ```
 
+Alternativaly, you may use PhpMyAdmin.
+
+```php
+define('DB_HOST', 'localhost');
+define('DB_NAME', 'phpmyadmin');
+define('DB_USER', 'phpmyadmin_username');
+define('DB_PASS', 'phpmyadmin_password');
+```
+
 ### 3. Web Server Configuration
 
 ### Apache
@@ -75,10 +84,10 @@ Ensure your document root points to the project directory, or configure a virtua
 
 ```apache
 <VirtualHost *:80>
-    ServerName brokerio.local
-    DocumentRoot /var/www/html/brokerio
+    ServerName brokerio.dev
+    DocumentRoot /var/www/brokerio
     
-    <Directory /var/www/html/brokerio>
+    <Directory /var/www/brokerio>
         Options Indexes FollowSymLinks
         AllowOverride All
         Require all granted
