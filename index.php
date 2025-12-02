@@ -5,6 +5,16 @@ $error = '';
 $success = false;
 $propertyData = null;
 
+// Fetch all properties for the sidebar
+$allProperties = [];
+try {
+    $pdo = getDbConnection();
+    $stmt = $pdo->query("SELECT id, name FROM properties ORDER BY created_at DESC");
+    $allProperties = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    error_log("Error fetching properties: " . $e->getMessage());
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name'] ?? '');
     $address = trim($_POST['address'] ?? '');
@@ -100,159 +110,17 @@ function geocodeAddress($address) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Brokerio</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-        }
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-        .header h1 {
-            font-size: 2em;
-            margin-bottom: 10px;
-        }
-        .content {
-            padding: 40px;
-        }
-        .form-group {
-            margin-bottom: 25px;
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 600;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        input[type="text"] {
-            width: 100%;
-            padding: 14px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-        input[type="text"]:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-        button {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
-        }
-        button:active {
-            transform: translateY(0);
-        }
-        .error {
-            background: #fee;
-            color: #c33;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border-left: 4px solid #c33;
-        }
-        .success {
-            background: #efe;
-            color: #3c3;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border-left: 4px solid #3c3;
-        }
-        .property-details {
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 8px;
-            margin-top: 20px;
-        }
-        .property-details h2 {
-            color: #333;
-            margin-bottom: 15px;
-            font-size: 1.5em;
-        }
-        .detail-row {
-            display: flex;
-            padding: 12px 0;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        .detail-row:last-child {
-            border-bottom: none;
-        }
-        .detail-label {
-            font-weight: 600;
-            color: #666;
-            width: 150px;
-            flex-shrink: 0;
-        }
-        .detail-value {
-            color: #333;
-            flex: 1;
-        }
-        .map-link {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 12px 24px;
-            background: #667eea;
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: 600;
-            transition: background 0.3s;
-        }
-        .map-link:hover {
-            background: #5568d3;
-        }
-        .back-link {
-            display: inline-block;
-            margin-top: 15px;
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 600;
-        }
-        .back-link:hover {
-            text-decoration: underline;
-        }
+        <?php include 'styles.css'; ?>
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🏠 Brokerio</h1>
-            <p>Add and enrich property information</p>
-        </div>
-        <div class="content">
+    <div class="main-content">
+        <div class="container">
+            <div class="header">
+                <h1>🏠 Brokerio</h1>
+                <p>Add and enrich property information</p>
+            </div>
+            <div class="content">
             <?php if ($error): ?>
                 <div class="error">
                     <strong>Error:</strong> <?php echo htmlspecialchars($error); ?>
@@ -337,6 +205,28 @@ function geocodeAddress($address) {
                     <button type="submit">Add Property</button>
                 </form>
             <?php endif; ?>
+            </div>
+        </div>
+    </div>
+    
+    <div class="sidebar">
+        <div class="properties-card">
+            <div class="properties-card-header">
+                My Properties
+            </div>
+            <div class="properties-list">
+                <?php if (empty($allProperties)): ?>
+                    <div class="empty-properties">No properties yet</div>
+                <?php else: ?>
+                    <?php foreach ($allProperties as $property): ?>
+                        <div class="property-item">
+                            <a href="public/map.html?id=<?php echo htmlspecialchars($property['id']); ?>">
+                                <?php echo htmlspecialchars($property['name']); ?>
+                            </a>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
 </body>

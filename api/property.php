@@ -24,12 +24,10 @@ try {
         exit;
     }
     
-    // Get all notes for this property
     $stmt = $pdo->prepare("SELECT * FROM notes WHERE property_id = ? ORDER BY created_at DESC");
     $stmt->execute([$propertyId]);
     $notes = $stmt->fetchAll();
     
-    // Return property with notes
     echo json_encode([
         'property' => $property,
         'notes' => $notes

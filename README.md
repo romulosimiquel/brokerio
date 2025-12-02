@@ -15,6 +15,7 @@ A full-stack PHP application for property research and management using the LAMP
 ```
 brokerio/
 ├── index.php             # Main entry point with property form
+├── styles.css            # Index styles file
 ├── README.md             # This file
 ├── AI_PROPOSAL.md        # AI/LLM enhancement proposal
 ├── api/
