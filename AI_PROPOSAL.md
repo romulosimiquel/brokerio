@@ -28,7 +28,6 @@ Currently, the system requires manual entry of property names and addresses, and
   - Market float risk
   - Environmental risk
   - Operational risk
-  - 
 
 **Output:**
 - Risk score (0-100)
@@ -36,7 +35,16 @@ Currently, the system requires manual entry of property names and addresses, and
 - Recommended actions
 - Comparable properties for context
 
+## Implementation
+
+Implement API dedicated to risk analysis with its own dataset created for scoring purpose, integrating with OpenAI api while feeding them with information for consistent risk scoring, develop prioritazation algorithim based on risk scores. Create a dashboard for consolidated informations about the property risks.
+
+About environmental risks, Leaflet is able to infom a set of visual data on the maps, so with this in mind we can dinamicaly show points of interest.
+
+<img width="603" height="404" alt="image" src="https://github.com/user-attachments/assets/8b61086c-4971-47df-b4d5-9ea1c55a5d2f" />
+
 ## Technical Architecture
+
 
 ### High-Level System Design
 
@@ -71,50 +79,6 @@ Currently, the system requires manual entry of property names and addresses, and
 - **Backend Integration:** PHP REST API calling LLM APIs directly
 - **Data Storage:** Existing MySQL database with new risk assessment fields
 
-## Risks and Mitigation Strategies
-
-### Risk 1: API Costs
-**Risk:** LLM API calls can be expensive at scale (GPT-4: ~$0.03-0.06 per 1K tokens)
-
-**Mitigation:**
-- Use GPT-3.5-turbo for simple tasks ($0.0015/1K tokens)
-- Cache common queries and results
-- Implement rate limiting and usage monitoring
-- Consider self-hosted models (Llama 2, Mistral) for high-volume operations
-- Batch processing instead of real-time for non-critical features
-
-### Risk 2: Data Accuracy
-**Risk:** LLMs can hallucinate or extract incorrect information
-
-**Mitigation:**
-- Always include confidence scores
-- Human-in-the-loop review for critical data
-- Cross-reference multiple sources
-- Validate extracted data against known schemas
-- Maintain audit logs of AI-generated content
-- Allow manual override of all AI suggestions
-
-### Risk 3: Rate Limiting and API Availability
-**Risk:** External APIs may be unavailable or rate-limited
-
-**Mitigation:**
-- Implement robust error handling and retries
-- Use multiple LLM providers (OpenAI + Anthropic)
-- Queue system for background processing
-- Graceful degradation (fall back to manual entry)
-- Local caching of common queries
-
-### Risk 4: Privacy and Data Security
-**Risk:** Sending property addresses to third-party APIs
-
-**Mitigation:**
-- Review API provider privacy policies
-- Anonymize sensitive data before API calls when possible
-- Use enterprise APIs with data processing agreements
-- Implement data retention policies
-- Encrypt data in transit and at rest
-- Consider on-premise LLM deployment for sensitive data
-
 ## Expected Benefits
 
 1. **Prioritization:** Automatically identify high-priority properties requiring immediate attention
@@ -122,7 +86,6 @@ Currently, the system requires manual entry of property names and addresses, and
 3. **Consistency:** Standardized risk assessment across all properties
 4. **Time Savings:** Reduce manual risk analysis from hours to minutes per property
 5. **Decision Support:** Data-driven recommendations for property investment decisions
-
 
 ## Conclusion
 
