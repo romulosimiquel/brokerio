@@ -1,0 +1,13 @@
+{
+    "name": "brokerio/brokerio",
+    "description": "Property management application",
+    "require-dev": {
+        "phpunit/phpunit": "^10.0"
+    },
+    "autoload": {
+        "files": [
+            "api/db.php"
+        ]
+    }
+}
+
